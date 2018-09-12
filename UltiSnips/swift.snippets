@@ -1,0 +1,168 @@
+global !p
+def print_if_empty(text, at):
+	if t[at] == "" or t[at].startswith("\n"):
+		snip.rv = text
+	else:
+		snip.rv = ""
+
+def print_unless_empty(text, at):
+	if t[at] == "" or t[at].startswith("\n"):
+		snip.rv = ""
+	else:
+		snip.rv = text
+
+def print_if_generics(text, at):
+	mat = re.search(".*<(.+)>\s*$", t[at])
+	if mat:
+		snip.rv = mat.group(1) + text
+	else:
+		snip.rv = ""
+endglobal
+
+snippet as "associatedtype" b
+associatedtype ${1:Foo}`!p print_unless_empty(": ", 2)`${2:conformsTo}`!p print_unless_empty(" = ", 3)`${3:Default}
+endsnippet
+
+snippet ca "case" b
+case ${1:pattern}:$0
+endsnippet
+
+snippet cv "class var"
+class var ${0:name}
+endsnippet
+
+snippet cl "class"
+class ${1:Box<Wrapped>}`!p print_unless_empty(": ", 2)`${2:Superclass, MyProtocol}`!p print_unless_empty(" where ", 3)`${3:`!p print_if_generics(": conformsTo", 1)`} {
+	$0
+}
+endsnippet
+
+snippet de "deinit" b
+deinit {
+	$0
+}
+endsnippet
+
+snippet di "didSet" b
+didSet {
+	$0
+}
+endsnippet
+
+snippet el "else / else if"
+else`!p print_unless_empty(" if ", 1)`${1:condition} {
+	$0
+}
+endsnippet
+
+snippet en "enum" b
+enum ${1:Box<Wrapped>}`!p print_unless_empty(": ", 2)`${2:MyProtocol}`!p print_unless_empty(" where ", 3)`${3:`!p print_if_generics(": ConformsTo", 1)`} {
+	$0
+}
+endsnippet
+
+# Conditional conformance is not supported in Swift 4 and below
+# snippet ex "extension" b
+# extension ${1:Foo}`!p print_unless_empty(": ", 2)`${2:Equatable}${3:`!p print_unless_empty(" where ", 3)`}${3:KeyType: CustomeStringConvertible} {
+# 	$0
+# }
+# endsnippet
+snippet ex "extension" b
+extension ${1:Foo}${2::Equatable | where KeyType: CustomStringConvertible} {
+	$0
+}
+endsnippet
+
+snippet fixme "Fixme"
+// FIXME: 
+endsnippet
+
+snippet fu "func"
+func ${1:doSomething<Value>}(${2:with value: Value})`!p print_unless_empty(" ", 3)`${3:throw}`!p print_unless_empty(" -> ", 4)`${4:Result}`!p print_unless_empty(" where ", 5)`${5:`!p print_if_generics(": ConformsTo", 1)`} {
+	$0
+}
+endsnippet
+
+snippet if "if"
+if ${1:condition} {
+	$0
+}
+endsnippet
+
+snippet im "import" b
+import ${1:Foundation,Cocoa,UIKit,CoreGraphics,WebKit}
+endsnippet
+
+snippet in "init"
+init${1:?!<Value>}(${2:with value: Value})`!p print_unless_empty(" ", 3)`${3:throws}`!p print_unless_empty(" where ", 4)`${4:`!p print_if_generics(": ConformsTo", 1)`} {
+	$0
+}
+endsnippet
+
+snippet mark "Mark"
+// MARK: 
+endsnippet
+
+snippet op "operator"
+${1:prefix|infix|postfix} operator ${2:>>=} : ${3:MultiplicationPrecedence}
+endsnippet
+
+snippet param "Param"
+:param: 
+endsnippet
+
+snippet pr "protocol" b
+protocol ${1:Fooable}`!p print_unless_empty(": ", 2)`${2:ConformsTo} {
+	$0
+}
+endsnippet
+
+snippet returns "Returns"
+:returns: 
+endsnippet
+
+snippet swift "#!/usr/bin/env swift"
+#!/usr/bin/env swift
+endsnippet
+
+snippet sv "static var"
+static var ${1:name}
+endsnippet
+
+snippet st "struct"
+struct ${1:Box<Wrapped>}`!p print_unless_empty(": ", 2)`${2:MyProtocol}`!p print_unless_empty(" where ", 3)`${3:`!p print_if_generics(": ConformsTo", 1)`} {
+	$0
+}
+endsnippet
+
+snippet su "subscript"
+subscript(${1:index: Int}) -> ${2:Value} {
+	get {
+		$3
+	}${4:
+	set {
+		$0
+	}}
+}
+endsnippet
+
+snippet sw "switch"
+switch ${1:value} {
+case ${2:pattern}:
+	$0
+}
+endsnippet
+
+snippet todo "Todo"
+// TODO: 
+endsnippet
+
+snippet ty "typealias"
+typealias ${1:Foo<Value>} = ${2:Bar<Key, Value>}
+endsnippet
+
+snippet wi "willSet"
+willSet {
+	$0
+}
+endsnippet
